@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lya y Daddy 🎀</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Lemonada:wght@400;600;700&family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{
+    min-height:100vh;
+    font-family:'Vazirmatn','Lemonada',sans-serif;
+    background:linear-gradient(160deg,#ffd6e8 0%,#ffb3d1 45%,#ff9ec4 100%);
+    background-attachment:fixed;
+    color:#7a1e48;
+    overflow-x:hidden;
+  }
+  .brand{font-family:'Pacifico',cursive;direction:ltr;color:#e0356f;text-shadow:2px 2px 0 #fff,4px 4px 0 #ffc2da}
+  /* decorations */
+  #floaters{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .floater{position:absolute;bottom:-60px;opacity:.75;animation:rise linear infinite;white-space:nowrap}
+  .floater.txt{font-family:'Pacifico',cursive;direction:ltr;color:#fff;text-shadow:0 0 6px #ff74a8}
+  @keyframes rise{
+    0%{transform:translateY(0) rotate(0deg)}
+    100%{transform:translateY(-115vh) rotate(25deg)}
+  }
+  .wm{position:fixed;font-family:'Pacifico',cursive;direction:ltr;color:rgba(255,255,255,.35);pointer-events:none;z-index:0;font-size:2.4rem;transform:rotate(-12deg)}
+  .screen{display:none;position:relative;z-index:1;min-height:100vh;padding:24px 16px 90px;max-width:760px;margin:0 auto;text-align:center}
+  .screen.active{display:block;animation:pop .6s ease}
+  @keyframes pop{from{opacity:0;transform:scale(.94) translateY(15px)}to{opacity:1;transform:none}}
+  h1.brand{font-size:2.6rem;margin:10px 0}
+  h2{font-family:'Lemonada',sans-serif;font-size:1.5rem;margin:8px 0 14px;color:#c2185b}
+  .card-box{
+    background:rgba(255,255,255,.72);
+    border:3px dashed #ff74a8;
+    border-radius:28px;
+    padding:22px 18px;
+    margin:16px auto;
+    box-shadow:0 10px 30px rgba(224,53,111,.25);
+    backdrop-filter:blur(4px);
+  }
+  .card-box p{line-height:2.1;font-size:1.08rem;margin-bottom:14px;font-weight:600}
+  .btn{
+    font-family:'Lemonada',sans-serif;
+    background:linear-gradient(135deg,#ff5c9d,#ff8fbd);
+    color:#fff;border:none;border-radius:50px;
+    padding:13px 30px;font-size:1.05rem;cursor:pointer;
+    box-shadow:0 6px 0 #d63b78,0 10px 20px rgba(214,59,120,.35);
+    margin:8px;transition:transform .15s;
+  }
+  .btn:active{transform:translateY(4px);box-shadow:0 2px 0 #d63b78}
+  .btn.light{background:#fff;color:#e0356f;box-shadow:0 6px 0 #ffb3d1}
+  /* game */
+  #stats{font-weight:700;margin:6px 0 14px}
+  #grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:420px;margin:0 auto;direction:ltr}
+  .tile{aspect-ratio:1/1;perspective:600px;cursor:pointer}
+  .inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+  .tile.flipped .inner,.tile.matched .inner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;border-radius:20px;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;box-shadow:0 5px 12px rgba(224,53,111,.35)}
+  .front{background:linear-gradient(135deg,#ff7eb3,#ff4f93);color:#fff;font-size:1.7rem}
+  .front span{font-size:.7rem;font-family:'Pacifico',cursive;display:block;line-height:1}
+  .back{background:#fff;transform:rotateY(180deg);font-size:3rem;border:3px solid #ff9ec4}
+  .tile.matched .back{background:#fff0f6;border-color:#ff4f93;animation:bounce .6s}
+  @keyframes bounce{0%,100%{transform:rotateY(180deg) scale(1)}50%{transform:rotateY(180deg) scale(1.12)}}
+  #win{display:none;margin-top:18px}
+  /* pages */
+  .nav{position:fixed;bottom:0;left:0;right:0;z-index:5;display:none;justify-content:center;align-items:center;gap:6px;padding:10px;background:rgba(255,255,255,.6);backdrop-filter:blur(8px)}
+  .dots{display:flex;gap:7px}
+  .dot{width:11px;height:11px;border-radius:50%;background:#ffc2da}
+  .dot.on{background:#e0356f;transform:scale(1.3)}
+  .final-text{font-family:'Lemonada',sans-serif;font-size:1.25rem;line-height:2.2;color:#c2185b}
+  .big-emoji{font-size:3rem;animation:wiggle 1.6s infinite}
+  @keyframes wiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+  #musicBtn{position:fixed;top:12px;left:12px;z-index:10;width:46px;height:46px;border-radius:50%;border:none;background:#fff;font-size:1.3rem;box-shadow:0 4px 10px rgba(224,53,111,.4);cursor:pointer;display:none}
+  .tag{display:inline-block;background:#fff;border-radius:30px;padding:6px 16px;margin:4px;font-weight:700;color:#e0356f;box-shadow:0 3px 8px rgba(224,53,111,.2)}
+</style>
+</head>
+<body>
+
+<div id="floaters"></div>
+<div class="wm" style="top:8%;right:4%">Lya y Daddy</div>
+<div class="wm" style="top:45%;left:2%">Lya y Daddy</div>
+<div class="wm" style="bottom:12%;right:6%">Lya y Daddy</div>
+
+<button id="musicBtn" title="گۆرانی">🎵</button>
+
+<!-- START -->
+<section class="screen active" id="s-start">
+  <div class="big-emoji" style="margin-top:40px">🐣🎀</div>
+  <h1 class="brand">Lya y Daddy</h1>
+  <div class="card-box">
+    <h2>سڵاو لیا گیان 🥹🐣</h2>
+    <p>دادی شتێکی بۆ ئامادەکردویت 🥹 بەڵام پێش ئەوەی بچیتە ناو نامەکە، دەبێت یاریەکی بچووک بکەیت 🐣</p>
+    <p>کارتەکان هەڵبدەرەوە و خواردنە خۆشەویستەکانت بدۆزەرەوە 🍓🍫🍕</p>
+    <button class="btn" id="startBtn">دەست پێبکە 🎀</button>
+  </div>
+  <div class="brand" style="font-size:1.4rem">Lya y Daddy 🎀 Lya y Daddy</div>
+</section>
+
+<!-- GAME -->
+<section class="screen" id="s-game">
+  <h1 class="brand" style="font-size:2rem">Lya y Daddy</h1>
+  <h2>خواردنەکانی لیا 🥹🐣</h2>
+  <div id="stats">هەوڵ: <span id="moves">0</span> &nbsp;|&nbsp; دۆزراوە: <span id="found">0</span>/6</div>
+  <div id="grid"></div>
+  <div id="win">
+    <div class="card-box">
+      <div class="big-emoji">🎉🥹</div>
+      <h2>ئافەرین لیا گیان! 🐣</h2>
+      <p>هەموو خواردنە خۆشەویستەکانتم دۆزییەوە 🍓🍕🍫🍦🍩🧁</p>
+      <button class="btn" id="toLetter">بڕۆ بۆ نامەکە 💌🎀</button>
+    </div>
+  </div>
+</section>
+
+<!-- LETTER PAGES -->
+<div id="pages"></div>
+
+<div class="nav" id="nav">
+  <button class="btn light" id="nextBtn" style="padding:8px 20px">دواتر ➜</button>
+  <div class="dots" id="dots"></div>
+  <button class="btn light" id="prevBtn" style="padding:8px 20px">⬅ پێشوو</button>
+</div>
+
+<script>
+/* ========== بەشی دەق ========== */
+const pages = [
+  {
+    emoji:"🥹🐣",
+    title:"بۆ لیای خۆشەویستم",
+    paras:[
+      "لیا گیان، ئەم نامەیە تەنیا بۆ تۆیە 🥹 هەر وشەیەکی تێیدایە بە دڵێکی پڕ لە خۆشەویستی نووسراوە 🐣",
+      "دەمەوێت بزانیت کە لە ژیانی ئەم دادییەدا شوێنێکی زۆر تایبەتت هەیە، شوێنێک کە کەس نایگرێتەوە 🥹",
+      "هەر کاتێک ناوی لیا دێت، دڵم گەرم دەبێت و بزەیەک دێتە سەر لێوم 🐣🎀",
+      "تۆ وەک ئەستێرەیەکی بچووکی پەمەیی وایت، لە هەموو شوێنێک ڕووناکی دەبەخشیت ✨🥹"
+    ]
+  },
+  {
+    emoji:"🎀🥹",
+    title:"چۆن دەتبینم",
+    paras:[
+      "تۆ کچێکی زۆر جوان و نازدار و دڵسۆزیت 🥹 هەم دڵت جوانە، هەم پێکەنینەکەت جوانە، هەم کاتێک قسە دەکەیت دنیا خۆشتر دەبێت 🐣",
+      "بزەکەت وەک ڕۆژی بەهاری وایە، هەموو ناخۆشیەک دەسڕێتەوە و ڕۆحم ئارام دەکاتەوە 🥹🎀",
+      "هەندێک جار بیر دەکەمەوە کە خوا چەندە ئەو کەسانەی خۆشدەویستوون، چونکە تۆی وەک خۆشەویستێکی وا پێداون 🐣",
+      "ئەگەر هەموو دنیا یەکبخەم، هێشتا هیچ شتێک ناگاتە ئەوەی تۆ بۆ من دەیبیت 🥹"
+    ]
+  },
+  {
+    emoji:"🐣🍓",
+    title:"بەڵێنەکانی دادی",
+    paras:[
+      "بەڵێنت پێدەدەم هەمیشە لە تەنیشتت بم، لە ڕۆژە خۆشەکان و لە ڕۆژە قورسەکانیش 🥹",
+      "بەڵێنت پێدەدەم هەرگیز نەهێڵم دڵت بشکێت، و ئەگەر ڕۆژێک خەمبار بوویت، یەکەم کەس دەبم کە دەتپێکەنێنێت 🐣🎀",
+      "بەڵێنت پێدەدەم هەموو ئەو خواردنانەت بۆ بکڕم کە حەزت لێیە: پیتزا، شۆکۆلێت، ئایسکرێم، دۆناتی، کەیکی بچووک و توتی 🍕🍫🍦🍩🧁🍓🥹",
+      "بەڵێنت پێدەدەم هەمیشە گوێم لێت بێت، چونکە قسەکانت لای من زۆر گرنگن 🐣"
+    ]
+  },
+  {
+    emoji:"🥹🎀",
+    title:"سوپاس لیا گیان",
+    paras:[
+      "سوپاست دەکەم بۆ هەموو ساتە جوانەکان کە لەگەڵ یەک بەسەرمان بردوون 🥹🐣",
+      "سوپاست دەکەم بۆ ئەو کاتانەی بەبێ هۆ پێمدەکەنیت و پێمدەڵێیت «دادی» 🥹 ئەو وشەیە لای من لە هەموو گۆرانیەک خۆشترە 🎀",
+      "سوپاست دەکەم چونکە لیای، و چونکە هەیت، و چونکە وای لە دنیای من کردووە ڕەنگی پەمەیی هەبێت 🐣🥹",
+      "هەر ڕۆژێک کە لەگەڵتدا بێت، بۆ من جەژنە 🎀"
+    ]
+  },
+  {
+    emoji:"🎀🐣🥹",
+    title:"کۆتا قسە",
+    paras:[
+      "لیا گیان، هەمیشە بزانە کە خۆشەویستیت لە دڵمدا هەرگیز کۆتایی نایەت 🥹🐣",
+      "هەر کاتێک ئەم نامەیە خوێندەوە، بیرت بێت کە کەسێک هەیە بەبێ هیچ مەرجێک خۆشی دەویت 🎀",
+      "ئێستا بزەیەک بکە، چونکە تۆ شایانی هەموو خۆشیەکانی دنیایت 🥹🐣"
+    ],
+    final:true
+  }
+];
+
+/* ========== دروستکردنی پەڕەکان ========== */
+const pagesWrap = document.getElementById('pages');
+const dotsWrap = document.getElementById('dots');
+pages.forEach((p,i)=>{
+  const s = document.createElement('section');
+  s.className='screen'; s.id='p-'+i;
+  let html = `<div class="big-emoji" style="margin-top:20px">${p.emoji}</div>
+    <h1 class="brand" style="font-size:2.1rem">Lya y Daddy</h1>
+    <div class="card-box"><h2>${p.title}</h2>`;
+  p.paras.forEach(t=>html+=`<p>${t}</p>`);
+  html += `<div class="brand" style="font-size:1.3rem;margin-top:8px">Lya y Daddy 🎀</div></div>`;
+  if(p.final){
+    html += `<div class="card-box" style="border-style:solid">
+      <p class="final-text">هیوادارم دڵت بەمشتە خنجیلانەیە خۆش بێت کە مەلا سانی یا دادی بۆی دروستکردویت. 🥹🎀🐣</p>
+      <div class="brand" style="font-size:1.8rem;margin-top:10px">Lya y Daddy</div>
+    </div>`;
+  }
+  s.innerHTML = html;
+  pagesWrap.appendChild(s);
+  const d=document.createElement('div');d.className='dot';dotsWrap.appendChild(d);
+});
+
+/* ========== ڕازاندنەوەی بەرزبوونەوە ========== */
+const fl = document.getElementById('floaters');
+const items = ['🎀','🐣','🥹','💗','🌸','Lya y Daddy','🍓','Lya y Daddy','🧁'];
+for(let i=0;i<22;i++){
+  const e=document.createElement('div');
+  const it=items[i%items.length];
+  e.className='floater'+(it.length>3?' txt':'');
+  e.textContent=it;
+  e.style.left=Math.random()*95+'%';
+  e.style.fontSize=(it.length>3? (16+Math.random()*10): (20+Math.random()*26))+'px';
+  e.style.animationDuration=(10+Math.random()*14)+'s';
+  e.style.animationDelay=(-Math.random()*20)+'s';
+  fl.appendChild(e);
+}
+
+/* ========== گۆڕینی شاشەکان ========== */
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+let cur=0;
+function showPage(i){
+  cur=Math.max(0,Math.min(pages.length-1,i));
+  show('p-'+cur);
+  document.querySelectorAll('.dot').forEach((d,k)=>d.classList.toggle('on',k===cur));
+  document.getElementById('prevBtn').style.visibility = cur===0?'hidden':'visible';
+  document.getElementById('nextBtn').style.visibility = cur===pages.length-1?'hidden':'visible';
+  if(cur===pages.length-1) confetti();
+}
+document.getElementById('nextBtn').onclick=()=>showPage(cur+1);
+document.getElementById('prevBtn').onclick=()=>showPage(cur-1);
+
+/* ========== یاری کارت ========== */
+const foods=['🍕','🍫','🍦','🍓','🍩','🧁'];
+let first=null,lock=false,moves=0,found=0;
+function buildGame(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  const deck=[...foods,...foods].sort(()=>Math.random()-.5);
+  deck.forEach(f=>{
+    const t=document.createElement('div');
+    t.className='tile';t.dataset.f=f;
+    t.innerHTML=`<div class="inner">
+      <div class="face front"><div>🎀<span>Lya</span></div></div>
+      <div class="face back">${f}</div></div>`;
+    t.onclick=()=>flip(t);
+    grid.appendChild(t);
+  });
+}
+function flip(t){
+  if(lock||t.classList.contains('flipped')||t.classList.contains('matched'))return;
+  t.classList.add('flipped');
+  if(!first){first=t;return;}
+  moves++;document.getElementById('moves').textContent=moves;
+  if(first.dataset.f===t.dataset.f){
+    first.classList.add('matched');t.classList.add('matched');
+    first=null;found++;
+    document.getElementById('found').textContent=found;
+    if(found===foods.length){
+      setTimeout(()=>{document.getElementById('win').style.display='block';confetti();
+        window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});},600);
+    }
+  }else{
+    lock=true;
+    setTimeout(()=>{first.classList.remove('flipped');t.classList.remove('flipped');first=null;lock=false;},800);
+  }
+}
+
+/* ========== کۆنفێتی ========== */
+function confetti(){
+  const em=['💗','🎀','🐣','🥹','🌸','✨'];
+  for(let i=0;i<30;i++){
+    const c=document.createElement('div');
+    c.textContent=em[i%em.length];
+    c.style.cssText=`position:fixed;top:-30px;left:${Math.random()*100}%;font-size:${20+Math.random()*20}px;z-index:20;pointer-events:none;transition:transform ${2+Math.random()*2}s ease-in,opacity 3s;`;
+    document.body.appendChild(c);
+    requestAnimationFrame(()=>{
+      c.style.transform=`translateY(${105+Math.random()*10}vh) rotate(${Math.random()*500}deg)`;
+      c.style.opacity=.2;
+    });
+    setTimeout(()=>c.remove(),4500);
+  }
+}
+
+/* ========== گۆرانی ========== */
+/* ئەگەر گۆرانییەکی خۆت هەیە، ناوی فایلەکە لێرە بنووسە، بۆ نموونە "song.mp3"
+   فایلەکە لەگەڵ lya.html لە یەک بوخچەدا دابنێ.
+   ئەگەر بەتاڵی بهێڵیتەوە، مۆسیقای سندوقی خشڵی نەرم (music box) لێدەدرێت. */
+const CUSTOM_SONG = "";
+
+let audioEl=null, ctx=null, playing=false, timer=null;
+const N={C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,B5:987.77,C6:1046.5,G4:392,A4:440,E4:329.63,C4:261.63,F4:349.23};
+const melody=[
+ ['E5',1],['G5',1],['C6',2],['B5',1],['G5',1],['E5',2],
+ ['D5',1],['F5',1],['A5',2],['G5',1],['F5',1],['D5',2],
+ ['C5',1],['E5',1],['G5',1],['A5',1],['G5',2],['E5',2],
+ ['F5',1],['A5',1],['C6',2],['B5',1],['A5',1],['G5',2]
+];
+const bass=[['C4',8],['F4',8],['C4',8],['G4',8]];
+function tone(freq,t,dur,vol,type){
+  const o=ctx.createOscillator(),g=ctx.createGain();
+  o.type=type;o.frequency.value=freq;
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+.02);
+  g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g);g.connect(ctx.destination);
+  o.start(t);o.stop(t+dur+.05);
+}
+function loopSynth(){
+  if(!playing)return;
+  const beat=.42;let t=ctx.currentTime+.1;
+  melody.forEach(([n,b])=>{tone(N[n],t,b*beat*1.8,.12,'triangle');tone(N[n]*2,t,b*beat,.03,'sine');t+=b*beat;});
+  let tb=ctx.currentTime+.1;
+  bass.forEach(([n,b])=>{tone(N[n]/2,tb,b*beat*1.2,.1,'sine');tb+=b*beat;});
+  timer=setTimeout(loopSynth,(t-ctx.currentTime-.1)*1000);
+}
+function startMusic(){
+  if(playing)return;
+  playing=true;
+  document.getElementById('musicBtn').textContent='🎵';
+  if(CUSTOM_SONG){
+    audioEl=audioEl||Object.assign(new Audio(CUSTOM_SONG),{loop:true});
+    audioEl.play().catch(()=>{});
+  }else{
+    ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();
+    ctx.resume();loopSynth();
+  }
+}
+function stopMusic(){
+  playing=false;clearTimeout(timer);
+  if(audioEl)audioEl.pause();
+  if(ctx)ctx.suspend();
+  document.getElementById('musicBtn').textContent='🔇';
+}
+document.getElementById('musicBtn').onclick=()=>{playing?stopMusic():(ctx&&ctx.resume(),startMusic());};
+
+/* ========== دوگمەکان ========== */
+document.getElementById('startBtn').onclick=()=>{
+  startMusic();
+  document.getElementById('musicBtn').style.display='block';
+  buildGame();show('s-game');
+};
+document.getElementById('toLetter').onclick=()=>{
+  document.getElementById('nav').style.display='flex';
+  showPage(0);
+};
+</script>
+</body>
+</html>
+
